@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Water Monitor Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FAVICON TAB -->
+  <link rel="icon" type="image/png" href="padma-ubud-logo.png">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #3e4e75;
+      color: #e5e7eb;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .logo {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .datetime {
+      font-size: 16px;
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+      width: 220px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #38bdf8;
+    }
+
+    .value {
+      font-size: 36px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .unit {
+      font-size: 16px;
+      color: #94a3b8;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGO -->
+  <img src="padma-ubud-logo.png" class="logo" alt="Logo Padma Ubud">
+
+  <h1>WATER MONITOR DASHBOARD</h1>
+  <div class="datetime" id="datetime">--</div>
+
+  <div class="container">
+    <div class="card">
+      <h2>TDS</h2>
+      <div class="value" id="tds">--</div>
+      <div class="unit">ppm</div>
+    </div>
+
+    <div class="card">
+      <h2>pH</h2>
+      <div class="value" id="ph">--</div>
+    </div>
+
+    <div class="card">
+      <h2>Temperature</h2>
+      <div class="value" id="temp">--</div>
+      <div class="unit">°C</div>
+    </div>
+  </div>
+
+  <footer>
+    Realtime Firebase Water Monitoring
+  </footer>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // ================= FIREBASE CONFIG =================
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8k9MMLKHsatBKa1IetyiMThvUoMrabkM",
+      authDomain: "watermonitor-c80ae.firebaseapp.com",
+      databaseURL: "https://watermonitor-c80ae-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "watermonitor-c80ae",
+      storageBucket: "watermonitor-c80ae.firebasestorage.app",
+      messagingSenderId: "33188144740",
+      appId: "1:33188144740:web:b43d2b88a93805ef64e171"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // PATH SESUAI ESP32
+    const sensorRef = database.ref("sensor_air/status");
+
+    sensorRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      document.getElementById("tds").innerText =
+        Number(data.tds_ppm).toFixed(0);
+
+      document.getElementById("ph").innerText =
+        Number(data.ph).toFixed(2);
+
+      document.getElementById("temp").innerText =
+        Number(data.temperature).toFixed(1);
+    });
+
+    // ================= WAKTU & TANGGAL =================
+    function updateDateTime() {
+      const now = new Date();
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      };
+
+      document.getElementById("datetime").innerText =
+        now.toLocaleDateString("id-ID", options);
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script>
+
+</body>
+</html>
