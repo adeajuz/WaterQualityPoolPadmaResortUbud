@@ -5,7 +5,6 @@
   <title>Water Monitor Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FAVICON TAB -->
   <link rel="icon" type="image/png" href="padma-ubud-logo.png">
 
   <style>
@@ -29,7 +28,7 @@
 
     .datetime {
       font-size: 16px;
-      color: #94a3b8;
+      color: #cbd5f5;
       margin-bottom: 30px;
     }
 
@@ -42,10 +41,10 @@
 
     .card {
       background: #1e293b;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 20px;
       width: 220px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.45);
     }
 
     .card h2 {
@@ -68,10 +67,11 @@
     footer {
       margin-top: 40px;
       font-size: 14px;
-      color: #94a3b8;
+      color: #cbd5f5;
     }
   </style>
 </head>
+
 <body>
 
   <!-- LOGO -->
@@ -80,7 +80,9 @@
   <h1>WATER MONITOR DASHBOARD</h1>
   <div class="datetime" id="datetime">--</div>
 
+  <!-- DATA CARD -->
   <div class="container">
+
     <div class="card">
       <h2>TDS</h2>
       <div class="value" id="tds">--</div>
@@ -93,10 +95,17 @@
     </div>
 
     <div class="card">
+      <h2>Salinity</h2>
+      <div class="value" id="salinity">--</div>
+      <div class="unit">ppt</div>
+    </div>
+
+    <div class="card">
       <h2>Temperature</h2>
       <div class="value" id="temp">--</div>
       <div class="unit">°C</div>
     </div>
+
   </div>
 
   <footer>
@@ -134,6 +143,9 @@
 
       document.getElementById("ph").innerText =
         Number(data.ph).toFixed(2);
+
+      document.getElementById("salinity").innerText =
+        Number(data.salinity_ppt).toFixed(2);
 
       document.getElementById("temp").innerText =
         Number(data.temperature).toFixed(1);
